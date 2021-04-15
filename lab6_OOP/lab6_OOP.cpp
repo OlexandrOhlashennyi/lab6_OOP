@@ -1,4 +1,10 @@
-﻿#include <iostream>
+﻿/*Створити шаблонний клас – послідовність абстрактних символів. 
+Тип елементів послідовності (цілі числа, дійсні числа, символи
+або символьні рядки) визначається параметром шаблона. Передбачити
+функції для виконання таких операцій: введення елементів у послідовність,
+відношення < , > , == , != , виведення послідовності на екран.*/
+
+#include <iostream>
 #include <string>
 
 using namespace std;
@@ -12,13 +18,17 @@ public:
 	sequence(int = 0);
 	~sequence();
 	void add(T new_e);
-	void print();
 	int get_size() { return size; }
 	T get_element(unsigned);
+	T sum();
 	sequence& operator+(sequence&);
 	sequence& operator=(const sequence&);
 	template <typename T>friend ostream& operator<<(ostream&, sequence<T>&);
 	template <typename T> friend istream& operator>>(istream&, sequence<T>&);
+	bool operator==(const sequence&);
+	bool operator!=(const sequence&);
+	bool operator<(sequence&);
+	bool operator>(sequence&);
 };
 
 int main() {
@@ -28,16 +38,18 @@ int main() {
 	s.add(3);
 	s.add(4);
 	sequence<int> s2(5);
+	s2.add(1);
+	s2.add(2);
+	s2.add(3);
+	s2.add(454);
 
-	cin >> s2;
-	//cout << s2 << endl;
+	//cin >> s2;
 	
-	s2 = s2 + s2;
-	cout << s2;
+	//s2 = s2 + s2;
+	cout << (s2 < s);
 
 	return 0;
 }
-
 
 template <class T>
 sequence<T>::sequence(int size) {
@@ -76,6 +88,15 @@ T sequence<T>::get_element(unsigned index)
 }
 
 template<class T>
+T sequence<T>::sum()
+{
+	T sum = T(0);
+	for (int i = 0; i < size; i++)
+		sum += data[i];
+	return sum;
+}
+
+template<class T>
 sequence<T>& sequence<T>::operator+(sequence<T>& s)
 {
 	int i = 0, j = 0;
@@ -95,6 +116,42 @@ sequence<T>& sequence<T>::operator=(const sequence<T>& s)
 	copy(temp, temp + s.size, this->data);
 	this->size = s.size;
 	return *this;
+}
+
+template<class T>
+bool sequence<T>::operator==(const sequence<T>& s)
+{
+	if(this->size != s.size)
+		return false;
+	for (int i = 0; i < this->size; i++) {
+		if(this->data[i] != s.data[i])
+			return false;
+	}
+	return true;
+}
+
+template<class T>
+bool sequence<T>::operator!=(const sequence<T>& s)
+{
+	if (this->size != s.size)
+		return true;
+	for (int i = 0; i < this->size; i++) {
+		if (this->data[i] != s.data[i])
+			return true;
+	}
+	return false;
+}
+
+template<class T>
+bool sequence<T>::operator<(sequence<T>& s)
+{
+	return (this->sum() < s.sum());
+}
+
+template<class T>
+bool sequence<T>::operator>(sequence<T>& s)
+{
+	return (this->sum() > s.sum());
 }
 
 
