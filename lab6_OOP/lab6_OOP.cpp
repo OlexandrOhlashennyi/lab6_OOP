@@ -5,6 +5,7 @@
 відношення < , > , == , != , виведення послідовності на екран.*/
 
 #include <iostream>
+#include <cstdlib>
 #include <string>
 
 using namespace std;
@@ -31,41 +32,45 @@ public:
 };
 
 int main() {
-	/*sequence<char*> s;
-	s.add((char*)"1");
-	s.add((char*)"2");
-	s.add((char*)"3");
-	s.add((char*)"4");
-	s.add((char*)"4");
-	s.add((char*)"4");
-	sequence<char*> s2;
-	s2.add((char*)"asd");
-	s2.add((char*)"ase");
-	s2.add((char*)"3");
-	s2.add((char*)"454");*/
-
-	sequence<int> s;
-	s.add(1);
-	s.add(2);
-	s.add(4);
-	s.add(4);
-	s.add(4);
-	s.add(4);
+	system("chcp 1251"); system("cls");
+	sequence<int> s1;
 	sequence<int> s2;
-	s2.add(8);
-	s2.add(9);
-	s2.add(10);
-	s2.add(11);
+	sequence<int> s3;
+	
+	cout << "Введіть першу послідовність(q -- кінець):\n";
+	cin >> s1;
+	cout << "Введіть другу послідовність(q -- кінець):\n";
+	cin >> s2;
 
+	cout << "\n\tПерша послідовність:\n";
+	cout << s1 << endl;
+	cout << "\n\tДруга послідовність:\n";
 	cout << s2 << endl;
-	cout << (s2 > s) << endl;
-	s2 = s2 + s;
-	cout << s2 << endl;
-	cout << (s2 > s) << endl;
-	cout << (s2 != s) << endl;
+
+	cout << "\nперша > друга?\n" << ((s1 > s2) ? "Так" : "Ні") << endl;
+	cout << "\nперша < друга?\n" << ((s1 < s2) ? "Так" : "Ні") << endl;
+	cout << "\nперша == друга?\n" << ((s1 == s2) ? "Так" : "Ні") << endl;
+	cout << "\nперша != друга?\n" << ((s1 != s2) ? "Так" : "Ні") << endl;
+
+	s3 = s1 + s2;
+	cout << "\nперша + друга:\n" << s3 << endl;
 
 	return 0;
 }
+
+/*
+1
+2
+3
+4
+5
+q
+6
+7
+8
+9
+q
+*/
 
 template <class T>
 sequence<T>::sequence(int size) {
@@ -77,6 +82,7 @@ sequence<T>::sequence(int size) {
 template <class T>
 sequence<T>::~sequence() {
 	delete[] data;
+	data = NULL;
 }
 
 template<class T>
@@ -185,8 +191,10 @@ ostream& operator<<(ostream& os, sequence<T>& s)
 template<typename T>
 istream& operator>>(istream& is, sequence<T>& s)
 {
-	cout << "Enter " << s.size << " elements\n";
-	for (int i = 0; i < s.size; i++)
-		is >> s.data[i];
+	is.clear();
+	is.seekg(0);
+	T temp;
+	while (is >> temp)
+		s.add(temp);
 	return is;
 }
