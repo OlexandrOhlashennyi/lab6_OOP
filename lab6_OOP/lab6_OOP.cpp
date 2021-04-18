@@ -20,7 +20,6 @@ public:
 	void add(T new_e);
 	int get_size() { return size; }
 	T get_element(unsigned);
-	T sum();
 	sequence& operator+(sequence&);
 	sequence& operator=(const sequence&);
 	template <typename T>friend ostream& operator<<(ostream&, sequence<T>&);
@@ -32,21 +31,38 @@ public:
 };
 
 int main() {
+	/*sequence<char*> s;
+	s.add((char*)"1");
+	s.add((char*)"2");
+	s.add((char*)"3");
+	s.add((char*)"4");
+	s.add((char*)"4");
+	s.add((char*)"4");
+	sequence<char*> s2;
+	s2.add((char*)"asd");
+	s2.add((char*)"ase");
+	s2.add((char*)"3");
+	s2.add((char*)"454");*/
+
 	sequence<int> s;
 	s.add(1);
 	s.add(2);
-	s.add(3);
 	s.add(4);
-	sequence<int> s2(5);
-	s2.add(1);
-	s2.add(2);
-	s2.add(3);
-	s2.add(454);
+	s.add(4);
+	s.add(4);
+	s.add(4);
+	sequence<int> s2;
+	s2.add(8);
+	s2.add(9);
+	s2.add(10);
+	s2.add(11);
 
-	//cin >> s2;
-	
-	//s2 = s2 + s2;
-	cout << (s2 < s);
+	cout << s2 << endl;
+	cout << (s2 > s) << endl;
+	s2 = s2 + s;
+	cout << s2 << endl;
+	cout << (s2 > s) << endl;
+	cout << (s2 != s) << endl;
 
 	return 0;
 }
@@ -88,21 +104,25 @@ T sequence<T>::get_element(unsigned index)
 }
 
 template<class T>
-T sequence<T>::sum()
-{
-	T sum = T(0);
-	for (int i = 0; i < size; i++)
-		sum += data[i];
-	return sum;
-}
-
-template<class T>
 sequence<T>& sequence<T>::operator+(sequence<T>& s)
 {
-	int i = 0, j = 0;
+	T* temp = new T[this->size+s.size];
+	try {
+		copy(data, data + this->size, temp);
+		copy(s.data, s.data + s.size, temp+size);
+	}
+	catch (...) {
+		delete[] temp;
+		throw;
+	}
+	delete[] data;
+	data = temp;
+	size += s.size;
+
+	/*int i = 0, j = 0;
 	while (i < this->size && j < s.size) {
 		this->data[i++] += s.data[j++];
-	}
+	}*/
 	return *this;
 }
 
@@ -145,13 +165,13 @@ bool sequence<T>::operator!=(const sequence<T>& s)
 template<class T>
 bool sequence<T>::operator<(sequence<T>& s)
 {
-	return (this->sum() < s.sum());
+	return (this->size < s.size);
 }
 
 template<class T>
 bool sequence<T>::operator>(sequence<T>& s)
 {
-	return (this->sum() > s.sum());
+	return (this->size > s.size);
 }
 
 
